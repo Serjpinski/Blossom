@@ -1,8 +1,0 @@
-C:\Users\Serjpinski\Desktop\Blossom\Blossom\bin\Debug\Blossom.exe
-C:\Users\Serjpinski\Desktop\Blossom\Blossom\bin\Debug\Blossom.pdb
-C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Debug\Blossom.csprojResolveAssemblyReference.cache
-C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Debug\Blossom.Properties.Resources.resources
-C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Debug\Blossom.csproj.GenerateResource.Cache
-C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Debug\Blossom.exe
-C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Debug\Blossom.pdb
-C:\Users\Serjpinski\Desktop\Blossom\Blossom\bin\Debug\Blossom.exe.config

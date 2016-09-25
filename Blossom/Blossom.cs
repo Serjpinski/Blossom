@@ -6,12 +6,12 @@ using Screensavers;
 namespace Blossom {
 
     /// <summary>
-    /// An stochastic cellular automata made into screensaver.
+    /// A stochastic cellular automata made into screensaver.
     /// Author: Sergio Larrodera
     /// </summary>
     public class Blossom : Screensaver {
 
-        private static int cellSize = 1;
+        private static int cellSize = 2;
 
         private Random random;
         private int width; // Width of the screen
@@ -27,6 +27,7 @@ namespace Blossom {
 
             this.Initialize += new EventHandler(Blossom_Initialize);
             this.Update += new EventHandler(Blossom_Update);
+            this.Exit += new EventHandler(Blossom_Exit);
             Framerate = 30;
         }
 
@@ -112,6 +113,11 @@ namespace Blossom {
                     newCells2.RemoveAt(0);
                 }
             }
+        }
+
+        private void Blossom_Exit(object sender, EventArgs e) {
+
+
         }
 
         /// <summary>

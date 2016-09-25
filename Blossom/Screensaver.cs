@@ -673,7 +673,7 @@ namespace Screensavers
 			{
 				this.screensaver = screensaver;
 				this.form = form;
-				this.size = form.ClientSize;
+				this.size = form.Size;
 				this.graphics = form.CreateGraphics();
 				this.handle = form.Handle;
 
@@ -1009,8 +1009,8 @@ namespace Screensavers
 				return windows.GetEnumerator();
 			}
 
-			#endregion
-		}
+            #endregion
+        }
 	}
 
 	/// <summary>
