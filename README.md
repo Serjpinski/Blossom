@@ -10,4 +10,4 @@ Blossom.ColorFromHSB() original code by Chris Jackson: https://blogs.msdn.micros
 
 # Usage
 
-You can simply dowload and install the screensaver file "~/Blossom.scr", or you can download the full project and compile it yourself. If you are interested in the main algoritm, read the file "~/Blossom/Blossom.cs".
+You can download and install the screensaver file "~/Blossom.scr" or download the whole project and compile it yourself. If you are interested in the main algorithm, the source is in "~/Blossom/Blossom.cs".
