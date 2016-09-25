@@ -1,0 +1,7 @@
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\bin\Release\Blossom.exe
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\bin\Release\Blossom.pdb
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.Properties.Resources.resources
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.csproj.GenerateResource.Cache
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.exe
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.pdb
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\bin\Release\Blossom.exe.config
