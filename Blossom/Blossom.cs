@@ -5,7 +5,11 @@ using Screensavers;
 
 namespace Blossom {
 
-    class Blossom : Screensaver {
+    /// <summary>
+    /// An stochastic cellular automata made into screensaver.
+    /// Author: Sergio Larrodera
+    /// </summary>
+    public class Blossom : Screensaver {
 
         private static int cellSize = 1;
 
@@ -27,7 +31,7 @@ namespace Blossom {
         }
 
         [STAThread]
-        static void Main() {
+        public static void Main() {
 
             Blossom ps = new Blossom();
             ps.Run();
