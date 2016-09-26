@@ -25,8 +25,8 @@ namespace Blossom {
         private byte[,] cells; // Cell matrix
         private List<Point> newCells1; // List of new cells of type 1 (visible)
         private List<Point> newCells2; // List of new cells of type 2 (invisible)
-        private List<Point> border; // List of positions where cells can spawn
-        private List<Point> nextBorder; // List of spawn positions for the next generation
+        private HashSet<Point> border; // List of positions where cells can spawn
+        private HashSet<Point> nextBorder; // List of spawn positions for the next generation
 
         public Blossom() : base(FullscreenMode.SingleWindow) {
 
@@ -63,8 +63,7 @@ namespace Blossom {
             cells = new byte[width, height];
             newCells1 = new List<Point>();
             newCells2 = new List<Point>();
-            border = new List<Point>();
-            nextBorder = new List<Point>();
+            nextBorder = new HashSet<Point>();
 
             generation = 0;
             Graphics0.Clear(Color.Black); // Initial black screen
@@ -83,19 +82,25 @@ namespace Blossom {
             else {
 
                 generation++;
-                nextBorder = new List<Point>();
+                nextBorder = new HashSet<Point>();
+                HashSet<Point>.Enumerator borderList = border.GetEnumerator();
 
                 // Cell spwaning
-                while (border.Count > 0) {
+                while (borderList.MoveNext()) {
 
-                    int i = border[0].X;
-                    int j = border[0].Y;
+                    int i = borderList.Current.X;
+                    int j = borderList.Current.Y;
+
+                    if (i == 620) Console.Write("\ngen " + generation + " [" + i + "," + j + "]");
 
                     int numNei1 = Neighbors(i, j, 1, 1);
                     int numNei2 = Neighbors(i, j, 1, 2);
 
-                    double prob1 = (1 + numNei1) / 12.0;
-                    double prob2 = (1 + numNei2) / 8.0;
+                    //double prob1 = (1 + numNei1) / 12.0;
+                    //double prob2 = (1 + numNei2) / 8.0;
+
+                    double prob1 = 0.5;
+                    double prob2 = 0.5;
 
                     double p = random.NextDouble();
 
@@ -110,9 +115,7 @@ namespace Blossom {
                     else if (p < prob1 + prob2)
                         newCells2.Add(new Point(i, j));
                     // Waits for the next generation
-                    else nextBorder.Add(border[0]);
-
-                    border.RemoveAt(0);
+                    else nextBorder.Add(borderList.Current);
                 }
 
                 // Cell matrix update
