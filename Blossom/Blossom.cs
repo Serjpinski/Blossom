@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using Screensavers;
+using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace Blossom {
 
@@ -11,7 +13,8 @@ namespace Blossom {
     /// </summary>
     public class Blossom : Screensaver {
 
-        private static int cellSize = 2;
+        private RegistryKey settings;
+        private int cellSize = 1;
 
         private Random random;
         private int width; // Width of the screen
@@ -39,6 +42,13 @@ namespace Blossom {
         }
 
         private void Blossom_Initialize(object sender, EventArgs e) {
+
+            settings = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Blossom_Screensaver");
+            
+            if (settings != null) {
+
+                cellSize = (int) settings.GetValue("cellSize");
+            }
 
             random = new Random();
             width = Window0.Size.Width / cellSize;
@@ -211,6 +221,14 @@ namespace Blossom {
                 default:
                     return Color.FromArgb(iMax, iMid, iMin);
             }
+        }
+
+        /// <summary>
+		/// Shows the settings dialog.
+		/// </summary>
+		protected override void ShowSettingsDialog() {
+
+            Application.Run(new Settings());
         }
     }
 }

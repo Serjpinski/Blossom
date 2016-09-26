@@ -5,3 +5,5 @@ C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.csproj.GenerateR
 C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.exe
 C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.pdb
 C:\Users\Serjpinski\Desktop\Blossom\Blossom\bin\Release\Blossom.exe.config
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.csprojResolveAssemblyReference.cache
+C:\Users\Serjpinski\Desktop\Blossom\Blossom\obj\Release\Blossom.Settings.resources

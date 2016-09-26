@@ -473,7 +473,7 @@ namespace Screensavers
 				sw.WriteLine(SettingsText);
 			}
 
-			MessageBox.Show(sw.ToString(), "Blossom", MessageBoxButtons.OK);
+			MessageBox.Show(sw.ToString(), "Info", MessageBoxButtons.OK);
 		}
 
 		System.Threading.AutoResetEvent previewShutdownEvent = new System.Threading.AutoResetEvent(false);
