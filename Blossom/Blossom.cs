@@ -15,6 +15,8 @@ namespace Blossom {
 
         private RegistryKey settings;
         private int cellSize = 1;
+        private int framerate = 30;
+        private float sparsity = 0.5f;
 
         private Random random;
         private int width; // Width of the screen
@@ -31,7 +33,18 @@ namespace Blossom {
             this.Initialize += new EventHandler(Blossom_Initialize);
             this.Update += new EventHandler(Blossom_Update);
             this.Exit += new EventHandler(Blossom_Exit);
-            Framerate = 30;
+
+            // Loads configuration values
+            settings = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Blossom_Screensaver");
+
+            if (settings != null) {
+
+                cellSize = (int) settings.GetValue("cellSize");
+                framerate = (int) settings.GetValue("framerate");
+                sparsity = float.Parse((string) settings.GetValue("sparsity"));
+            }
+
+            Framerate = framerate;
         }
 
         [STAThread]
@@ -42,13 +55,6 @@ namespace Blossom {
         }
 
         private void Blossom_Initialize(object sender, EventArgs e) {
-
-            settings = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Blossom_Screensaver");
-            
-            if (settings != null) {
-
-                cellSize = (int) settings.GetValue("cellSize");
-            }
 
             random = new Random();
             width = Window0.Size.Width / cellSize;
