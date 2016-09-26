@@ -16,7 +16,7 @@ namespace Blossom {
         private RegistryKey settings;
         private int cellSize = 1;
         private int framerate = 30;
-        private float sparsity = 0.5f;
+        private float density = 0.5f;
 
         private Random random;
         private int width; // Width of the screen
@@ -41,7 +41,7 @@ namespace Blossom {
 
                 cellSize = (int) settings.GetValue("cellSize");
                 framerate = (int) settings.GetValue("framerate");
-                sparsity = float.Parse((string) settings.GetValue("sparsity"));
+                density = float.Parse((string) settings.GetValue("density"));
             }
 
             Framerate = framerate;

@@ -32,10 +32,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.framerate = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
-            this.sparsity = new System.Windows.Forms.NumericUpDown();
+            this.density = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.cellSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.framerate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sparsity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.density)).BeginInit();
             this.SuspendLayout();
             // 
             // okButton
@@ -148,29 +148,29 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(38, 92);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(103, 13);
+            this.label4.Size = new System.Drawing.Size(101, 13);
             this.label4.TabIndex = 10;
-            this.label4.Text = "Sparsity (default 0.5)";
+            this.label4.Text = "Density (default 0.5)";
             // 
-            // sparsity
+            // density
             // 
-            this.sparsity.DecimalPlaces = 1;
-            this.sparsity.Increment = new decimal(new int[] {
+            this.density.DecimalPlaces = 1;
+            this.density.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.sparsity.Location = new System.Drawing.Point(147, 90);
-            this.sparsity.Maximum = new decimal(new int[] {
+            this.density.Location = new System.Drawing.Point(147, 90);
+            this.density.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.sparsity.Name = "sparsity";
-            this.sparsity.Size = new System.Drawing.Size(42, 20);
-            this.sparsity.TabIndex = 9;
-            this.sparsity.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.sparsity.Value = new decimal(new int[] {
+            this.density.Name = "density";
+            this.density.Size = new System.Drawing.Size(42, 20);
+            this.density.TabIndex = 9;
+            this.density.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.density.Value = new decimal(new int[] {
             5,
             0,
             0,
@@ -184,7 +184,7 @@
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(229, 219);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.sparsity);
+            this.Controls.Add(this.density);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.framerate);
             this.Controls.Add(this.label2);
@@ -198,7 +198,7 @@
             this.Load += new System.EventHandler(this.Settings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.cellSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.framerate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sparsity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.density)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -215,6 +215,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown framerate;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.NumericUpDown sparsity;
+        private System.Windows.Forms.NumericUpDown density;
     }
 }

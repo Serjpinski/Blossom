@@ -36,7 +36,7 @@ namespace Blossom {
 
             key.SetValue("cellSize", (int) cellSize.Value);
             key.SetValue("framerate", (int) framerate.Value);
-            key.SetValue("sparsity", (float) sparsity.Value);
+            key.SetValue("density", (float) density.Value);
         }
 
         private void LoadSettings() {
@@ -48,13 +48,13 @@ namespace Blossom {
 
                 cellSize.Value = 1;
                 framerate.Value = 30;
-                sparsity.Value = (decimal) 0.5f;
+                density.Value = (decimal) 0.5f;
             }
             else {
 
                 cellSize.Value = (int) key.GetValue("cellSize");
                 framerate.Value = (int) key.GetValue("framerate");
-                sparsity.Value = decimal.Parse((string) key.GetValue("sparsity"));
+                density.Value = decimal.Parse((string) key.GetValue("density"));
             }
         }
 
