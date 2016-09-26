@@ -91,23 +91,20 @@ namespace Blossom {
                     int i = borderList.Current.X;
                     int j = borderList.Current.Y;
 
-                    if (i == 620) Console.Write("\ngen " + generation + " [" + i + "," + j + "]");
-
                     int numNei1 = Neighbors(i, j, 1, 1);
                     int numNei2 = Neighbors(i, j, 1, 2);
 
-                    //double prob1 = (1 + numNei1) / 12.0;
-                    //double prob2 = (1 + numNei2) / 8.0;
+                    double prob1 = (1 + numNei1) / 12.0;
+                    double prob2 = (1 + numNei2) / 8.0;
 
-                    double prob1 = 0.5;
-                    double prob2 = 0.5;
+                    //double prob1 = 0.5;
+                    //double prob2 = 0.5;
 
                     double p = random.NextDouble();
 
                     // Spawns a visible cell
                     if (p < prob1) {
 
-                        ExpandCell(i, j);
                         newCells1.Add(new Point(i, j));
                         DrawCell(i, j);
                     }
@@ -118,18 +115,20 @@ namespace Blossom {
                     else nextBorder.Add(borderList.Current);
                 }
 
-                // Cell matrix update
-
-                while (newCells1.Count > 0) {
-
-                    cells[newCells1[0].X, newCells1[0].Y] = 1;
-                    newCells1.RemoveAt(0);
-                }
+                // Cell matrix update and cell expansion
+                for (int i = 0; i < newCells1.Count; i++)
+                    cells[newCells1[i].X, newCells1[i].Y] = 1;
 
                 while (newCells2.Count > 0) {
 
                     cells[newCells2[0].X, newCells2[0].Y] = 2;
                     newCells2.RemoveAt(0);
+                }
+
+                while (newCells1.Count > 0) {
+
+                    ExpandCell(newCells1[0].X, newCells1[0].Y);
+                    newCells1.RemoveAt(0);
                 }
             }
         }
