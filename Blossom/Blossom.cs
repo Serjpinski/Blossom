@@ -16,7 +16,12 @@ namespace Blossom {
         private RegistryKey settings;
         private int cellSize = 1;
         private int framerate = 30;
-        private float density = 0.5f;
+        private float uniformity = 0;
+        private float growth = 0.5f;
+
+        private double colorVariation;
+        private double prob1Base;
+        private double prob2Base;
 
         private Random random;
         private int width; // Width of the screen
@@ -41,7 +46,8 @@ namespace Blossom {
 
                 cellSize = (int) settings.GetValue("cellSize");
                 framerate = (int) settings.GetValue("framerate");
-                density = float.Parse((string) settings.GetValue("density"));
+                uniformity = float.Parse((string) settings.GetValue("uniformity"));
+                growth = float.Parse((string) settings.GetValue("growth"));
             }
 
             Framerate = framerate;
@@ -64,6 +70,10 @@ namespace Blossom {
             newCells1 = new List<Point>();
             newCells2 = new List<Point>();
             nextBorder = new HashSet<Point>();
+
+            prob1Base = (0.35 + 0.15 * uniformity) * growth;
+            prob2Base = (1 - prob1Base / growth) * growth;
+            colorVariation = 360.0 * Math.Exp(prob1Base) / Math.Min(height, width);
 
             generation = 0;
             Graphics0.Clear(Color.Black); // Initial black screen
@@ -94,11 +104,11 @@ namespace Blossom {
                     int numNei1 = Neighbors(i, j, 1, 1);
                     int numNei2 = Neighbors(i, j, 1, 2);
 
-                    double prob1 = (1 + numNei1) / 12.0;
-                    double prob2 = (1 + numNei2) / 8.0;
-
-                    //double prob1 = 0.5;
-                    //double prob2 = 0.5;
+                    //double prob1 = (1 + numNei1) / 12.0;
+                    //double prob2 = (1 + numNei2) / 8.0;
+                    
+                    double prob1 = (1 + numNei1) * prob1Base;
+                    double prob2 = (1 + numNei2) * prob2Base;
 
                     double p = random.NextDouble();
 
@@ -172,7 +182,7 @@ namespace Blossom {
         private void DrawCell(int x, int y) {
 
             Graphics0.FillRectangle(
-                new SolidBrush(ColorFromHSB((generation % 720) / 2, 1, 0.5f)),
+                new SolidBrush(ColorFromHSB((int) (generation * colorVariation) % 360, 1, 0.5f)),
                 new Rectangle(x * cellSize, y * cellSize, cellSize, cellSize));
         }
 
