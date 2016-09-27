@@ -10,12 +10,12 @@ You can download and install the screensaver file "~/Blossom.scr" or download th
 
 You can customize the screensaver via the "Settings" button in Windows menu. There are 4 parameters:
 
-- Framerate. It's the number of times the cellular automata updates per second. Warning: a high framerate value can be CPU intensive.
-- Cell size. It's the size of each cell, in pixels. Default is 1 cell = 1 pixel, but you can increase the size if you want pixelated patterns.
+- Framerate. It's the number of times the cellular automata updates per second. Warning: a high framerate value can be CPU intensive, specially for large screens.
+- Cell size. It's the size of each cell, in pixels. Default is 1 cell = 1 pixel, but you can increase the size if you want pixelated or smaller patterns.
 - Uniformity. The higher this value is, the more uniformly the pattern will expand in every direction.
-- Growth. This represents the probability of a new cell to spawn. The higher the value, the faster the pattern will expand.
+- Growth. This represents the probability for a new cell to spawn. The higher the value, the faster the pattern will expand.
 
-The last two parameters have great influence in the style of the patters obtained. Try messing with them!
+The last two parameters have great influence in the style of the patterns obtained. Try messing with them!
 
 # Credits
 
