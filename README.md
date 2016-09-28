@@ -2,6 +2,14 @@
 
 A stochastic cellular automata made into screensaver.
 
+# Credits
+
+Screensaver.cs code by Rei Miyasaka: http://www.codeproject.com/Articles/14081/Write-a-Screensaver-that-Actually-Works
+
+Blossom.ColorFromHSB() original code by Chris Jackson: https://blogs.msdn.microsoft.com/cjacks/2006/04/12/converting-from-hsb-to-rgb-in-net/
+
+Settings dialog basics taken from Frank McCown: http://www.harding.edu/fmccown/screensaver/screensaver.html
+
 # Usage
 
 You can download and install the screensaver file "~/Blossom.scr" or download the whole project and compile it yourself. If you are interested in the main algorithm, the source is in "~/Blossom/Blossom.cs".
@@ -17,10 +25,12 @@ You can customize the screensaver via the "Settings" button in Windows menu. The
 
 The last two parameters have great influence in the style of the patterns obtained. Try messing with them!
 
-# Credits
+# Examples
 
-Screensaver.cs code by Rei Miyasaka: http://www.codeproject.com/Articles/14081/Write-a-Screensaver-that-Actually-Works
+- Pattern generated with uniformity = 0 and growth = 0.50:
 
-Blossom.ColorFromHSB() original code by Chris Jackson: https://blogs.msdn.microsoft.com/cjacks/2006/04/12/converting-from-hsb-to-rgb-in-net/
+![Pattern generated with uniformity = 0 and growth = 0.50](/Screenshots/uni000gro050.png?raw=true "Pattern generated with uniformity = 0 and growth = 0.50")
 
-Settings dialog basics taken from Frank McCown: http://www.harding.edu/fmccown/screensaver/screensaver.html
+- Pattern generated with uniformity = 0.4 and growth = 0.05:
+
+![Pattern generated with uniformity = 0.4 and growth = 0.05](/Screenshots/uni040gro005.png?raw=true "Pattern generated with uniformity = 0.4 and growth = 0.05")
