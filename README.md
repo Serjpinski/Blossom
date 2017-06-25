@@ -12,7 +12,7 @@ Settings dialog basics taken from Frank McCown: http://www.harding.edu/fmccown/s
 
 # Usage
 
-You can download and install the screensaver file "~/Blossom.scr" or download the whole project and compile it yourself. If you are interested in the main algorithm, the source is in "~/Blossom/Blossom.cs".
+You can download and install the screensaver file "\~/Blossom.scr" or download the whole project and compile it yourself. If you are interested in the main algorithm, the source is in "\~/Blossom/Blossom.cs".
 
 # Settings
 
