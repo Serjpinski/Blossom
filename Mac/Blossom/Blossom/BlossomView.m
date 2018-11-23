@@ -39,29 +39,9 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
     width = size.width / cellSize;
     height = size.height / cellSize;
     
-    cells = [[NSMutableArray alloc] initWithCapacity:width];
-    for (int i = 0; i < width; i++) {
-        cells[i] = [[NSMutableArray alloc] initWithCapacity:height];
-        for (int j = 0; j < height; j++) {
-            cells[i][j] = @(0);
-        }
-    }
-    
-    newCells1 = [[NSMutableArray alloc] initWithCapacity:0];
-    newCells2 = [[NSMutableArray alloc] initWithCapacity:0];
-    nextBorder = [[NSMutableSet alloc] initWithCapacity:0];
-    
     prob1Base = (0.35 + 0.15 * uniformity) * growth;
     prob2Base = (1 - prob1Base / growth) * growth;
     colorVariation = 360.0 * exp(prob1Base) / MIN(height, width);
-    
-    generation = 0;
-    
-    // Spanws the initial cell
-    cells[width / 2][height / 2] = @(1);
-    
-    [self drawCellWithX: width / 2 withY: height / 2 withR:1 withG:0 withB:0 withA:0];
-    [self expandCellWithX: width / 2 withY: height / 2];
     
     return self;
 }
@@ -79,75 +59,86 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
 - (void)drawRect:(NSRect)rect
 {
     [super drawRect:rect];
+    
+    [self initialize];
+}
+
+- (void)initialize
+{
+    cells = [[NSMutableArray alloc] initWithCapacity:width];
+    for (int i = 0; i < width; i++) {
+        cells[i] = [[NSMutableArray alloc] initWithCapacity:height];
+        for (int j = 0; j < height; j++) {
+            cells[i][j] = @(0);
+        }
+    }
+    
+    newCells1 = [[NSMutableArray alloc] initWithCapacity:0];
+    newCells2 = [[NSMutableArray alloc] initWithCapacity:0];
+    nextBorder = [[NSMutableSet alloc] initWithCapacity:0];
+    generation = 0;
+    
+    // Spanws the initial cell
+    cells[width / 2][height / 2] = @(1);
+    
+    [self clearScreen];
+    [self drawCellWithX: width / 2 withY: height / 2];
+    [self expandCellWithX: width / 2 withY: height / 2];
 }
 
 - (void)animateOneFrame
 {
-//    NSBezierPath *path;
-//    NSRect rect;
-//    NSSize size;
-//    NSColor *color;
-//    float red, green, blue, alpha;
-//    int shapeType;
-//
-//    size = [self bounds].size;
-//
-//    // Calculate random width and height
-//    rect.size = NSMakeSize( SSRandomFloatBetween( size.width / 100.0, size.width / 10.0 ), SSRandomFloatBetween( size.height / 100.0, size.height / 10.0 ));
-//
-//    // Calculate random origin point
-//    rect.origin = SSRandomPointForSizeWithinRect( rect.size, [self bounds] );
-//
-//    // Decide what kind of shape to draw
-//    shapeType = SSRandomIntBetween( 0, 2 );
-//
-//    switch (shapeType)
-//    {
-//        case 0: // rect
-//            path = [NSBezierPath bezierPathWithRect:rect];
-//            break;
-//
-//        case 1: // oval
-//            path = [NSBezierPath bezierPathWithOvalInRect:rect];
-//            break;
-//
-//        case 2: // arc
-//        default:
-//        {
-//            float startAngle, endAngle, radius;
-//            NSPoint point;
-//
-//            startAngle = SSRandomFloatBetween( 0.0, 360.0 );
-//            endAngle = SSRandomFloatBetween( startAngle, 360.0 + startAngle );
-//
-//            // Use the smallest value for the radius (either width or height)
-//            radius = rect.size.width <= rect.size.height ? rect.size.width / 2 : rect.size.height / 2;
-//
-//            // Calculate our center point
-//            point = NSMakePoint( rect.origin.x + rect.size.width / 2, rect.origin.y + rect.size.height / 2 );
-//
-//            // Construct the path
-//            path = [NSBezierPath bezierPath];
-//
-//            [path appendBezierPathWithArcWithCenter:point radius:radius startAngle:startAngle endAngle:endAngle clockwise:SSRandomIntBetween( 0, 1 )];
-//        }
-//            break;
-//    }
-//
-//    // Calculate a random color
-//    red = SSRandomFloatBetween( 0.0, 255.0 ) / 255.0;
-//    green = SSRandomFloatBetween( 0.0, 255.0 ) / 255.0;
-//    blue = SSRandomFloatBetween( 0.0, 255.0 ) / 255.0;
-//    alpha = SSRandomFloatBetween( 0.0, 255.0 ) / 255.0;
-//
-//    color = [NSColor colorWithCalibratedRed:red green:green blue:blue alpha:alpha];
-//
-//    [color set];
-//
-//    if (SSRandomIntBetween( 0, 1 ) == 0)
-//        [path fill];
-//    else
-//        [path stroke];
+    currentBorder = nextBorder; // Updates the border
+    
+    if ([currentBorder count] == 0) [self initialize];
+    else {
+        
+        generation++;
+        nextBorder = [[NSMutableSet alloc] initWithCapacity:0];
+        
+        // Cell spwaning
+        for (NSArray *cell in currentBorder) {
+            
+            int i = (int)cell[0];
+            int j = (int)cell[1];
+            
+            int numNei1 = [self neighborsWithX: i withY: j withRadius: 1 withType: 1];
+            int numNei2 = [self neighborsWithX: i withY: j withRadius: 1 withType: 2];
+            
+            double prob1 = (1 + numNei1) * prob1Base;
+            double prob2 = (1 + numNei2) * prob2Base;
+            
+            double p = SSRandomFloatBetween(0, 1);
+            
+            // Spawns a visible cell
+            if (p < prob1) {
+                
+                [newCells1 addObject: @[@(i), @(j)]];
+                [self drawCellWithX: i withY: j];
+            }
+            // Spawns an invisible cell
+            else if (p < prob1 + prob2)
+                [newCells2 addObject: @[@(i), @(j)]];
+            // Waits for the next generation
+            else [nextBorder addObject: @[@(i), @(j)]];
+        }
+        
+        // Cell matrix update and cell expansion
+        for (int i = 0; i < [newCells1 count]; i++)
+            cells[(int)newCells1[i][0]][(int)newCells1[i][1]] = @(1);
+        
+        while ([newCells2 count] > 0) {
+            
+            cells[(int)newCells2[0][0]][(int)newCells2[0][1]] = @(2);
+            [newCells2 removeObjectAtIndex: 0];
+        }
+        
+        while ([newCells1 count] > 0) {
+            
+            [self expandCellWithX: (int)newCells1[0][0] withY: (int)newCells1[0][1]];
+            [newCells1 removeObjectAtIndex: 0];
+        }
+    }
 }
 
 - (BOOL)hasConfigureSheet
@@ -160,19 +151,48 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
     return nil;
 }
 
-- (void)drawCellWithX:(int)x withY: (int)y withR: (float)r withG: (float)g withB: (float)b withA: (float)a
+- (void)drawCellWithX: (int)x withY: (int)y
 {
     NSRect rect;
-    rect.size = NSMakeSize(10, 10);
-    rect.origin = NSMakePoint(x, y);
+    rect.size = NSMakeSize(cellSize, cellSize);
+    rect.origin = NSMakePoint(x * cellSize, y * cellSize);
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:rect];
-    NSColor *color = [NSColor colorWithCalibratedRed:r green:g blue:b alpha:a];
+    NSColor *color = [NSColor colorWithHue: (int)(generation * colorVariation) % 360 saturation:1 brightness:0 alpha:255 / 2];
     [color set];
     [path fill];
 }
 
-- (void)expandCellWithX:(int)x withY: (int)y
+- (void)clearScreen
 {
-    
+    NSRect rect;
+    rect.size = NSMakeSize(width, height);
+    rect.origin = NSMakePoint(0, 0);
+    NSBezierPath *path = [NSBezierPath bezierPathWithRect:rect];
+    NSColor *color = [NSColor colorWithHue: 0 saturation:0 brightness:0 alpha:255];
+    [color set];
+    [path fill];
 }
+
+- (void)expandCellWithX: (int)x withY: (int)y
+{
+    for (int i = MAX(x - 1, 0); i < MIN(x + 2, width); i++)
+        for (int j = MAX(y - 1, 0); j < MIN(y + 2, height); j++)
+            if (i != x || j != y)
+                if ((int)cells[i][j] == 0)
+                    [nextBorder addObject: @[@(x), @(y)]];
+}
+
+- (int)neighborsWithX: (int)x withY: (int)y withRadius: (int)radius withType: (int)type
+{
+    int num = 0;
+    
+    for (int i = MAX(x - radius, 0); i < MIN(x + radius + 1, width); i++)
+        for (int j = MAX(y - radius, 0); j < MIN(y + radius + 1, height); j++)
+            if (i != x || j != y)
+                if ((int)cells[i][j] == type)
+                    num++;
+    
+    return num;
+}
+
 @end
