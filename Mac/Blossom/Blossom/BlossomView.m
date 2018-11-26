@@ -3,7 +3,6 @@
 //  Blossom
 //
 //  Created by Sergio Larrodera on 19/11/2018.
-//  Copyright © 2018 serjpinski. All rights reserved.
 //
 
 #import "BlossomView.h"
@@ -11,7 +10,7 @@
 @implementation BlossomView
 
 static int cellSize = 1;
-static int framerate = 30;
+static int framerate = 30.0;
 static float uniformity = 0;
 static float growth = 0.5f;
 
@@ -32,7 +31,7 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
-        [self setAnimationTimeInterval:1/30.0];
+        [self setAnimationTimeInterval:1/framerate];
     }
     
     NSSize size = [self bounds].size;
@@ -90,7 +89,9 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
 {
     currentBorder = nextBorder; // Updates the border
     
-    if ([currentBorder count] == 0) [self initialize];
+    if ([currentBorder count] == 0) {
+        [self initialize];
+    }
     else {
         
         generation++;
@@ -112,29 +113,30 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
             
             // Spawns a visible cell
             if (p < prob1) {
-                
                 [newCells1 addObject: @[@(i), @(j)]];
                 [self drawCellWithX: i withY: j];
             }
             // Spawns an invisible cell
-            else if (p < prob1 + prob2)
+            else if (p < prob1 + prob2) {
                 [newCells2 addObject: @[@(i), @(j)]];
+            }
             // Waits for the next generation
-            else [nextBorder addObject: @[@(i), @(j)]];
+            else {
+                [nextBorder addObject: @[@(i), @(j)]];
+            }
         }
         
         // Cell matrix update and cell expansion
-        for (int i = 0; i < [newCells1 count]; i++)
+        for (int i = 0; i < [newCells1 count]; i++) {
             cells[(int)newCells1[i][0]][(int)newCells1[i][1]] = @(1);
+        }
         
         while ([newCells2 count] > 0) {
-            
             cells[(int)newCells2[0][0]][(int)newCells2[0][1]] = @(2);
             [newCells2 removeObjectAtIndex: 0];
         }
         
         while ([newCells1 count] > 0) {
-            
             [self expandCellWithX: (int)newCells1[0][0] withY: (int)newCells1[0][1]];
             [newCells1 removeObjectAtIndex: 0];
         }
@@ -157,7 +159,7 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
     rect.size = NSMakeSize(cellSize, cellSize);
     rect.origin = NSMakePoint(x * cellSize, y * cellSize);
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:rect];
-    NSColor *color = [NSColor colorWithHue: (int)(generation * colorVariation) % 360 saturation:1 brightness:0 alpha:255 / 2];
+    NSColor *color = [NSColor colorWithHue: ((int)(generation * colorVariation) % 360) / 360.0 saturation:1 brightness:0.5 alpha:1];
     [color set];
     [path fill];
 }
@@ -175,22 +177,30 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
 
 - (void)expandCellWithX: (int)x withY: (int)y
 {
-    for (int i = MAX(x - 1, 0); i < MIN(x + 2, width); i++)
-        for (int j = MAX(y - 1, 0); j < MIN(y + 2, height); j++)
-            if (i != x || j != y)
-                if ((int)cells[i][j] == 0)
+    for (int i = MAX(x - 1, 0); i < MIN(x + 2, width); i++) {
+        for (int j = MAX(y - 1, 0); j < MIN(y + 2, height); j++) {
+            if (i != x || j != y) {
+                if ((int)cells[i][j] == 0) {
                     [nextBorder addObject: @[@(x), @(y)]];
+                }
+            }
+        }
+    }
 }
 
 - (int)neighborsWithX: (int)x withY: (int)y withRadius: (int)radius withType: (int)type
 {
     int num = 0;
     
-    for (int i = MAX(x - radius, 0); i < MIN(x + radius + 1, width); i++)
-        for (int j = MAX(y - radius, 0); j < MIN(y + radius + 1, height); j++)
-            if (i != x || j != y)
-                if ((int)cells[i][j] == type)
+    for (int i = MAX(x - radius, 0); i < MIN(x + radius + 1, width); i++) {
+        for (int j = MAX(y - radius, 0); j < MIN(y + radius + 1, height); j++) {
+            if (i != x || j != y) {
+                if ((int)cells[i][j] == type) {
                     num++;
+                }
+            }
+        }
+    }
     
     return num;
 }
