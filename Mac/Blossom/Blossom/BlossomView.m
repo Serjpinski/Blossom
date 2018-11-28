@@ -42,7 +42,32 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
     prob2Base = (1 - prob1Base / growth) * growth;
     colorVariation = 360.0 * exp(prob1Base) / MIN(height, width);
     
+    [self initialize];
+    
     return self;
+}
+
+- (void)initialize
+{
+    cells = [[NSMutableArray alloc] initWithCapacity:width];
+    for (int i = 0; i < width; i++) {
+        [cells setObject: [[NSMutableArray alloc] initWithCapacity:height] atIndexedSubscript: i];
+        for (int j = 0; j < height; j++) {
+            [[cells objectAtIndex: i] setObject: @(0) atIndexedSubscript: j];
+        }
+    }
+    
+    newCells1 = [[NSMutableArray alloc] initWithCapacity:0];
+    newCells2 = [[NSMutableArray alloc] initWithCapacity:0];
+    nextBorder = [[NSMutableSet alloc] initWithCapacity:0];
+    generation = 0;
+    
+    // Spanws the initial cell
+    [[cells objectAtIndex: width / 2] setObject: @(1) atIndexedSubscript: height / 2];
+    
+    [self clearScreen];
+    [self drawCellWithX: width / 2 withY: height / 2];
+    [self expandCellWithX: width / 2 withY: height / 2];
 }
 
 - (void)startAnimation
@@ -58,31 +83,6 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
 - (void)drawRect:(NSRect)rect
 {
     [super drawRect:rect];
-    
-    [self initialize];
-}
-
-- (void)initialize
-{
-    cells = [[NSMutableArray alloc] initWithCapacity:width];
-    for (int i = 0; i < width; i++) {
-        cells[i] = [[NSMutableArray alloc] initWithCapacity:height];
-        for (int j = 0; j < height; j++) {
-            cells[i][j] = @(0);
-        }
-    }
-    
-    newCells1 = [[NSMutableArray alloc] initWithCapacity:0];
-    newCells2 = [[NSMutableArray alloc] initWithCapacity:0];
-    nextBorder = [[NSMutableSet alloc] initWithCapacity:0];
-    generation = 0;
-    
-    // Spanws the initial cell
-    cells[width / 2][height / 2] = @(1);
-    
-    [self clearScreen];
-    [self drawCellWithX: width / 2 withY: height / 2];
-    [self expandCellWithX: width / 2 withY: height / 2];
 }
 
 - (void)animateOneFrame
@@ -93,24 +93,24 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
         [self initialize];
     }
     else {
-        
+    
         generation++;
         nextBorder = [[NSMutableSet alloc] initWithCapacity:0];
-        
+
         // Cell spwaning
         for (NSArray *cell in currentBorder) {
-            
-            int i = (int)cell[0];
-            int j = (int)cell[1];
-            
+
+            int i = [[cell objectAtIndex: 0] intValue];
+            int j = [[cell objectAtIndex: 1] intValue];
+
             int numNei1 = [self neighborsWithX: i withY: j withRadius: 1 withType: 1];
             int numNei2 = [self neighborsWithX: i withY: j withRadius: 1 withType: 2];
-            
+
             double prob1 = (1 + numNei1) * prob1Base;
             double prob2 = (1 + numNei2) * prob2Base;
-            
+
             double p = SSRandomFloatBetween(0, 1);
-            
+
             // Spawns a visible cell
             if (p < prob1) {
                 [newCells1 addObject: @[@(i), @(j)]];
@@ -125,19 +125,25 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
                 [nextBorder addObject: @[@(i), @(j)]];
             }
         }
-        
+
         // Cell matrix update and cell expansion
         for (int i = 0; i < [newCells1 count]; i++) {
-            cells[(int)newCells1[i][0]][(int)newCells1[i][1]] = @(1);
+            int x = [[[newCells1 objectAtIndex: i] objectAtIndex: 0] intValue];
+            int y = [[[newCells1 objectAtIndex: i] objectAtIndex: 1] intValue];
+            [[cells objectAtIndex: x] setObject: @(1) atIndexedSubscript: y];
         }
-        
+
         while ([newCells2 count] > 0) {
-            cells[(int)newCells2[0][0]][(int)newCells2[0][1]] = @(2);
+            int x = [[[newCells2 objectAtIndex: 0] objectAtIndex: 0] intValue];
+            int y = [[[newCells2 objectAtIndex: 0] objectAtIndex: 1] intValue];
+            [[cells objectAtIndex: x] setObject: @(2) atIndexedSubscript: y];
             [newCells2 removeObjectAtIndex: 0];
         }
-        
+
         while ([newCells1 count] > 0) {
-            [self expandCellWithX: (int)newCells1[0][0] withY: (int)newCells1[0][1]];
+            int x = [[[newCells1 objectAtIndex: 0] objectAtIndex: 0] intValue];
+            int y = [[[newCells1 objectAtIndex: 0] objectAtIndex: 1] intValue];
+            [self expandCellWithX: x withY: y];
             [newCells1 removeObjectAtIndex: 0];
         }
     }
@@ -159,7 +165,7 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
     rect.size = NSMakeSize(cellSize, cellSize);
     rect.origin = NSMakePoint(x * cellSize, y * cellSize);
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:rect];
-    NSColor *color = [NSColor colorWithHue: ((int)(generation * colorVariation) % 360) / 360.0 saturation:1 brightness:0.5 alpha:1];
+    NSColor *color = [NSColor colorWithHue: ((int)(generation * colorVariation) % 360) / 360.0 saturation:1 brightness:1 alpha:1];
     [color set];
     [path fill];
 }
@@ -170,7 +176,7 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
     rect.size = NSMakeSize(width, height);
     rect.origin = NSMakePoint(0, 0);
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:rect];
-    NSColor *color = [NSColor colorWithHue: 0 saturation:0 brightness:0 alpha:255];
+    NSColor *color = [NSColor colorWithHue: 0 saturation:1 brightness:0 alpha:1];
     [color set];
     [path fill];
 }
@@ -180,8 +186,8 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
     for (int i = MAX(x - 1, 0); i < MIN(x + 2, width); i++) {
         for (int j = MAX(y - 1, 0); j < MIN(y + 2, height); j++) {
             if (i != x || j != y) {
-                if ((int)cells[i][j] == 0) {
-                    [nextBorder addObject: @[@(x), @(y)]];
+                if ([[[cells objectAtIndex: i] objectAtIndex: j] intValue] == 0) {
+                    [nextBorder addObject: @[@(i), @(j)]];
                 }
             }
         }
@@ -195,7 +201,7 @@ NSMutableSet *nextBorder; // List of spawn positions for the next generation
     for (int i = MAX(x - radius, 0); i < MIN(x + radius + 1, width); i++) {
         for (int j = MAX(y - radius, 0); j < MIN(y + radius + 1, height); j++) {
             if (i != x || j != y) {
-                if ((int)cells[i][j] == type) {
+                if ([[[cells objectAtIndex: i] objectAtIndex: j] intValue] == type) {
                     num++;
                 }
             }
